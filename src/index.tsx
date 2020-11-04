@@ -1,6 +1,9 @@
 import React from 'react';
-import {Alert, Text, View} from 'react-native';
+import {Alert} from 'react-native';
+import store from '@/config/dva';
 import '@/config/http';
+import {Provider} from 'react-redux';
+import Navigator from '@/navigator/index';
 // export default Navigator;
 
 export default class extends React.Component {
@@ -21,20 +24,20 @@ export default class extends React.Component {
   };
   render() {
     return (
-      <View>
-        <Text onPress={this.onPress}>guofuasdfadsfwhat</Text>
-        <Text onPress={this.onPress}>guofuasdfadsfwhat</Text>
-        <Text onPress={this.onPress}>guofuasdfadsfwhat</Text>
-        <Text onPress={this.onPress}>guofuasdfadsfwhat</Text>
-        <Text onPress={this.onPress}>guofuasdfadsfwhat</Text>
-        <Text onPress={this.onPress}>guofuasdfadsfwhat</Text>
-        <Text onPress={this.onPress}>guofuasdfadsfwhat</Text>
-        <Text onPress={this.onPress}>bushiba</Text>
-      </View>
+      // <View>
+      //   <Text onPress={this.onPress}>guofuasdfadsfwhat</Text>
+      //   <Text onPress={this.onPress}>guofuasdfadsfwhat</Text>
+      //   <Text onPress={this.onPress}>guofuasdfadsfwhat</Text>
+      //   <Text onPress={this.onPress}>guofuasdfadsfwhat</Text>
+      //   <Text onPress={this.onPress}>guofuasdfadsfwhat</Text>
+      //   <Text onPress={this.onPress}>guofuasdfadsfwhat</Text>
+      //   <Text onPress={this.onPress}>guofuasdfadsfwhat</Text>
+      //   <Text onPress={this.onPress}>bushiba</Text>
+      // </View>
 
-      // <Provider store={store}>
-      //   <Navigator />
-      // </Provider>
+      <Provider store={store}>
+        <Navigator />
+      </Provider>
     );
   }
 }
