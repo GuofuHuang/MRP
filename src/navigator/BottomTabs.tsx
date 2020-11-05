@@ -1,7 +1,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Text, View} from 'react-native';
-
+import IconFont from "@/assets/iconfont";
 export type BottomTabParamList = {
   HomeTabs: undefined;
   Listen: undefined;
@@ -38,13 +38,19 @@ class BottomTabs extends React.Component {
           component={HomeScreen}
           options={{
             tabBarLabel: '首页',
+            tabBarIcon: ({color, size}) => (
+              <IconFont name="home" color={color} size={size} />
+            ),
           }}
         />
         <Tab.Screen
           name="Hello"
           component={HomeScreen1}
           options={{
-            tabBarLabel: '首页',
+            tabBarLabel: '我的',
+            tabBarIcon: ({color, size}) => (
+              <IconFont name="me" color={color} size={size} />
+            ),
           }}
         />
       </Tab.Navigator>
