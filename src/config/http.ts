@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = 'http://10.0.2.2:3000';
 // axios.defaults.headers = {
 //   icode: '6F1D72C83F450609',
 // };
