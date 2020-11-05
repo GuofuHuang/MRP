@@ -1,7 +1,8 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Text, View} from 'react-native';
-import IconFont from "@/assets/iconfont";
+import IconFont from '@/assets/iconfont';
+import Login from '@/pages/Login';
 export type BottomTabParamList = {
   HomeTabs: undefined;
   Listen: undefined;
@@ -45,7 +46,7 @@ class BottomTabs extends React.Component {
         />
         <Tab.Screen
           name="Hello"
-          component={HomeScreen1}
+          component={Login}
           options={{
             tabBarLabel: '我的',
             tabBarIcon: ({color, size}) => (
