@@ -1,6 +1,14 @@
 import axios from 'axios';
+import {getSystemName} from 'react-native-device-info';
 
-axios.defaults.baseURL = 'http://10.0.2.2:3000';
+
+console.log('system name', getSystemName());
+if (getSystemName() == "Android") {
+  axios.defaults.baseURL = 'http://10.0.2.2:3000';
+} else {
+  axios.defaults.baseURL = 'http://127.0.0.1:3000';
+}
+
 // axios.defaults.headers = {
 //   icode: '6F1D72C83F450609',
 // };
