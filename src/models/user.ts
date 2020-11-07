@@ -4,6 +4,7 @@ import axios from 'axios';
 import Toast from 'react-native-root-toast';
 import {goBack} from '@/utils/index';
 import storage, {load} from '@/config/storage';
+import {Alert} from "react-native";
 
 const USER_URL = '/auth/login';
 
@@ -62,13 +63,7 @@ const userModel: UserModel = {
         });
         goBack();
       } else {
-        Toast.show(msg, {
-          duration: Toast.durations.LONG,
-          position: Toast.positions.CENTER,
-          shadow: true,
-          animation: true,
-        });
-        console.log(msg);
+        Alert.alert('Error', msg);
       }
     },
     *logout(_, {put}) {

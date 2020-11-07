@@ -3,21 +3,33 @@ import {NavigationContainer, NavigationState} from '@react-navigation/native';
 import {
   createStackNavigator,
   HeaderStyleInterpolators,
-  CardStyleInterpolators,
+  CardStyleInterpolators, StackNavigationProp,
 } from '@react-navigation/stack';
-import {getActiveRouteName} from '../utils';
 import BottomTabs from '@/navigator/BottomTabs';
 import {Platform, StyleSheet, StatusBar} from 'react-native';
+import {getActiveRouteName, navigationRef} from '../utils';
+import Login from "@/pages/Login";
 
 const Stack = createStackNavigator();
 //
 // function HomeScreen() {
 //   return (
 //     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-//       <Text>Home Screen</Text>
+//       <Text>Index Screen</Text>
 //     </View>
 //   );
 // }
+export type RootStackParamList = {
+  BottomTabs: {
+    screen?: string;
+  };
+  Category: undefined;
+  Index: undefined;
+  Login: undefined;
+};
+
+
+export type RootStackNavigation = StackNavigationProp<RootStackParamList>;
 
 class Navigator extends React.Component {
   state = {
@@ -36,7 +48,9 @@ class Navigator extends React.Component {
   };
   render() {
     return (
-      <NavigationContainer>
+      <NavigationContainer
+        ref={navigationRef}
+      >
         <Stack.Navigator
           screenOptions={{
             headerTitleAlign: 'center',
@@ -59,8 +73,10 @@ class Navigator extends React.Component {
                 },
               }),
             },
+            cardStyle: { backgroundColor: '#fff' }
           }}>
-          <Stack.Screen name="Home" component={BottomTabs} />
+          <Stack.Screen name="Index" component={BottomTabs} />
+          <Stack.Screen name="Login" component={Login} />
         </Stack.Navigator>
       </NavigationContainer>
     );
