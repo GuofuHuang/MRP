@@ -1,24 +1,22 @@
 import React from 'react';
-import {NavigationContainer, NavigationState} from '@react-navigation/native';
+import {NavigationContainer, NavigationState, RouteProp} from '@react-navigation/native';
 import {
   createStackNavigator,
   HeaderStyleInterpolators,
   CardStyleInterpolators, StackNavigationProp,
 } from '@react-navigation/stack';
 import BottomTabs from '@/navigator/BottomTabs';
-import {Platform, StyleSheet, StatusBar} from 'react-native';
-import {getActiveRouteName, navigationRef} from '../utils';
+import {Platform, StyleSheet, StatusBar, View, Button, Text, Alert, Route} from 'react-native';
+import {getActiveRouteName, navigate, navigationRef} from '../utils';
 import Login from "@/pages/Login";
+import ProductCategory from "@/pages/ProductCategory";
+import Touchable from "@/components/Touchable";
+import IconFont from "@/assets/iconfont";
+import AddProductCategory from "@/pages/ProductCategory/AddProductCategory";
+import {IProductCategory} from "@/models/productCategory";
 
 const Stack = createStackNavigator();
-//
-// function HomeScreen() {
-//   return (
-//     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-//       <Text>Index Screen</Text>
-//     </View>
-//   );
-// }
+
 export type RootStackParamList = {
   BottomTabs: {
     screen?: string;
@@ -26,7 +24,29 @@ export type RootStackParamList = {
   Category: undefined;
   Index: undefined;
   Login: undefined;
+  ProductCategory: any;
 };
+
+function getOptions({route}: { route: RouteProp<RootStackParamList, 'ProductCategory'> }) {
+  const {params} = route;
+  return {
+    headerTitle: "Product Category level" + params?.level,
+    headerTitleStyle: {
+      opacity: 0.5,
+    },
+    headerRight: () => {
+      return (
+        <Touchable style={{padding: 10}} onPress={(props) =>
+        {
+          navigate('AddProductCategory', route.params)
+        }
+        }>
+          <IconFont name='plus' size={20} />
+        </Touchable>
+      );
+    },
+  };
+}
 
 
 export type RootStackNavigation = StackNavigationProp<RootStackParamList>;
@@ -77,6 +97,11 @@ class Navigator extends React.Component {
           }}>
           <Stack.Screen name="Index" component={BottomTabs} />
           <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="AddProductCategory" component={AddProductCategory} />
+          <Stack.Screen
+            name="ProductCategory" component={ProductCategory}
+            options={getOptions}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     );

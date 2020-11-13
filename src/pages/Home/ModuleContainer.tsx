@@ -5,6 +5,7 @@ import {RootStackNavigation} from '@/navigator/index';
 import {FlatList, SafeAreaView, StyleSheet, ScrollView, Text, View, StatusBar} from "react-native";
 import Touchable from "@/components/Touchable";
 import IconFont from "@/assets/iconfont";
+import {IconNames} from "@/assets/iconfont";
 import {IModule} from "@/pages/Home/index";
 import {navigate} from "@/utils/index";
 
@@ -37,23 +38,34 @@ const DATA = [
   },
 ];
 
-interface IProps {
+interface IProps extends ModelState {
   module: IModule;
 }
 
 class ModuleContainer extends React.Component<IProps, any> {
 
   goTo = () => {
-    const {module} = this.props;
-    navigate(module.namespace);
+    const {module, dispatch} = this.props;
+    console.log('goto', 'afasd', module.namespace);
+
+    dispatch({
+      type: module.namespace + '/loadCategories',
+      payload: {
+        component: module.component,
+        parentCategoryId: null,
+        level: 0
+      }
+    })
+    // navigate(module.namespace);
   }
 
   render() {
     const {module} = this.props;
+
     return (
       <View style={styles.container}>
         <Touchable onPress={this.goTo} style={styles.center}>
-          <IconFont name="icon_xinyong_xianxing_jijin-129" color={'red'} size={30} />
+          <IconFont name={module.icon} color={'red'} size={30} />
           <Text>{module.name}</Text>
         </Touchable>
       </View>

@@ -6,7 +6,7 @@ import {FlatList, ListRenderItemInfo, ScrollView, StyleSheet, View} from "react-
 import ModuleContainer from "@/pages/Home/ModuleContainer";
 import { Text } from 'react-native-elements';
 import Touchable from "@/components/Touchable";
-import IconFont from "@/assets/iconfont";
+import IconFont, {IconNames} from "@/assets/iconfont";
 import ListItemContainer from "@/pages/Home/ListItemContainer";
 
 const mapStateToProps = ({home}: RootState) => {
@@ -24,6 +24,7 @@ interface IProps extends ModelState {
 }
 
 export interface IListItem {
+  id?: string;
   title: string;
   modules: IModule[];
 }
@@ -31,24 +32,26 @@ export interface IListItem {
 export interface IModule {
   name: string;
   namespace: string;
-  icon: string;
+  component: string;
+  icon: IconNames;
 }
 
-
-const DATA = [
+const DATA: IListItem[] = [
   {
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
     title: '基础模块',
     modules: [
       {
-        name: "产品分类",
-        namespace: 'Login',
-        icon: 'category'
+        name: "产品",
+        namespace: 'login',
+        component: 'Login',
+        icon: 'icon_xinyong_xianxing_jijin-129',
       },
       {
-        name: "产品",
-        namespace: 'Login',
-        icon: 'category'
+        name: "产品分类",
+        namespace: 'productCategory',
+        component: 'ProductCategory',
+        icon: 'category',
       }
     ]
   },
@@ -114,8 +117,9 @@ class Home extends React.Component<any, any> {
   }
 
   goTo = (data: any) => {
-    console.log('data', data);
-    const {navigation} = this.props;
+    // const {} = this.props;
+    // console.log('data', data);
+    // const {navigation} = this.props;
     // navigation.navigate('Login');
   }
 
