@@ -8,6 +8,7 @@ import Touchable from '@/components/Touchable';
 import AddModal from './AddModal';
 import {Avatar, ListItem} from "react-native-elements";
 import IconFont from "@/assets/iconfont";
+import {navigate} from "@/utils/index";
 
 const mapStateToProps = ({productCategory, loading}: RootState) => {
   return {
@@ -44,15 +45,18 @@ class ProductCategory extends React.Component<IProps, IState> {
     this.setState(Object.assign({}, this.state, {modalVisible: visible}));
   };
 
-  onPress = (item: IProductCategory) => {
-    this.setState(
-      Object.assign({}, this.state, {
-        selectedId: item._id,
-        selectedCategory: item,
-        modalVisible: true,
-      }),
-    );
+  onPress = (index: number, item: IProductCategory) => {
+    console.log("item'", index, item);
+    navigate('CategoryDetail', item);
+    // this.setState(
+    //   Object.assign({}, this.state, {
+    //     selectedId: item._id,
+    //     selectedCategory: item,
+    //     modalVisible: true,
+    //   }),
+    // );
   };
+
   renderItem = ({index, item}: any) => {
     const backgroundColor =
       item._id === this.state.selectedId ? 'lightgray' : '#fff';
@@ -65,7 +69,7 @@ class ProductCategory extends React.Component<IProps, IState> {
     //   </Touchable>
     // );
     return (
-      <Touchable>
+      <Touchable onPress={() => this.onPress(index, item)}>
         <ListItem key={index} bottomDivider>
           <ListItem.Content>
             <ListItem.Title>{item.name}</ListItem.Title>
@@ -89,78 +93,67 @@ class ProductCategory extends React.Component<IProps, IState> {
     return index.toString();
   }
 
-  get emptyComponent() {
-    const {productCategories} = this.props;
-    return (
-      <View style={styles.mainContainer}>
-        <View style={styles.middleContainer}>
-          <View style={styles.categoryContainer}>
-              <FlatList
-                data={productCategories}
-                keyExtractor={this.getKey}
-                renderItem={this.renderItem}
-              />
-            <Touchable style={styles.itemContainer} onPress={this.onChange}>
-              <Text style={styles.addCategoryText}>增加</Text>
-            </Touchable>
-          </View>
-          <View style={styles.categoryContainer}>
-            <Text>guofu2</Text>
-          </View>
-        </View>
-        {/*<View style={styles.bottomContainer}>*/}
-        {/*  <View style={styles.bottomTextContainer}>*/}
-        {/*    <Text style={[styles.bottomText, styles.bottomLeftText]}>删除</Text>*/}
-        {/*  </View>*/}
-        {/*  <View style={styles.bottomTextContainer}>*/}
-        {/*    <Text style={styles.bottomText}>编辑</Text>*/}
-        {/*  </View>*/}
-        {/*</View>*/}
-      </View>
-    )
-  }
-
-  get headerComponent() {
-    const {selectedCategory, modalVisible} = this.state;
-    return (
-      <View>
-        <AddModal childRef={(ref: any) => (this.child = ref)} modalVisible={modalVisible} />
-        <View style={styles.topContainer}>
-          <Text style={styles.topItemText}>当前类别: </Text>
-          <Text style={styles.topItemText}>{selectedCategory.name}</Text>
-        </View>
-      </View>
-    )
-  }
-
-  get footerComponent() {
-    return (
-      <View>
-        <View style={styles.bottomContainer}>
-          <View style={styles.bottomTextContainer}>
-            <Text style={[styles.bottomText, styles.bottomLeftText]}>删除</Text>
-          </View>
-          <View style={styles.bottomTextContainer}>
-            <Text style={styles.bottomText}>编辑</Text>
-          </View>
-        </View>
-      </View>
-    )
-  }
-
-  renderItem2 = ({item}: any) => {
-    return (
-      <View>
-        <Text>
-          {item.name}
-        </Text>
-      </View>
-    )
-  }
-
+  // get emptyComponent() {
+  //   const {productCategories} = this.props;
+  //   return (
+  //     <View style={styles.mainContainer}>
+  //       <View style={styles.middleContainer}>
+  //         <View style={styles.categoryContainer}>
+  //             <FlatList
+  //               data={productCategories}
+  //               keyExtractor={this.getKey}
+  //               renderItem={this.renderItem}
+  //             />
+  //           <Touchable style={styles.itemContainer} onPress={this.onChange}>
+  //             <Text style={styles.addCategoryText}>增加</Text>
+  //           </Touchable>
+  //         </View>
+  //         <View style={styles.categoryContainer}>
+  //           <Text>guofu2</Text>
+  //         </View>
+  //       </View>
+  //       {/*<View style={styles.bottomContainer}>*/}
+  //       {/*  <View style={styles.bottomTextContainer}>*/}
+  //       {/*    <Text style={[styles.bottomText, styles.bottomLeftText]}>删除</Text>*/}
+  //       {/*  </View>*/}
+  //       {/*  <View style={styles.bottomTextContainer}>*/}
+  //       {/*    <Text style={styles.bottomText}>编辑</Text>*/}
+  //       {/*  </View>*/}
+  //       {/*</View>*/}
+  //     </View>
+  //   )
+  // }
+  //
+  // get headerComponent() {
+  //   const {selectedCategory, modalVisible} = this.state;
+  //   return (
+  //     <View>
+  //       <AddModal childRef={(ref: any) => (this.child = ref)} modalVisible={modalVisible} />
+  //       <View style={styles.topContainer}>
+  //         <Text style={styles.topItemText}>当前类别: </Text>
+  //         <Text style={styles.topItemText}>{selectedCategory.name}</Text>
+  //       </View>
+  //     </View>
+  //   )
+  // }
+  //
+  // get footerComponent() {
+  //   return (
+  //     <View>
+  //       <View style={styles.bottomContainer}>
+  //         <View style={styles.bottomTextContainer}>
+  //           <Text style={[styles.bottomText, styles.bottomLeftText]}>删除</Text>
+  //         </View>
+  //         <View style={styles.bottomTextContainer}>
+  //           <Text style={styles.bottomText}>编辑</Text>
+  //         </View>
+  //       </View>
+  //     </View>
+  //   )
+  // }
+  //
   render() {
     const {productCategories} = this.props;
-    console.log("index state got change", productCategories);
     return (
       // <SectionList
       //   sections={this.data}

@@ -3,13 +3,13 @@ import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import {RootState} from '@/models/index';
 import {connect, ConnectedProps} from 'react-redux';
 
-const mapStateToProps = ({category}: RootState) => {
-  return {
-    isEdit: category.isEdit,
-  };
-};
+// const mapStateToProps = ({category}: RootState) => {
+//   return {
+//     isEdit: category.isEdit,
+//   };
+// };
 
-const connector = connect(mapStateToProps);
+const connector = connect();
 
 type ModelState = ConnectedProps<typeof connector>;
 
@@ -19,10 +19,10 @@ interface IProps extends ModelState {
 
 class HeaderRightBtn extends React.Component<IProps> {
   render() {
-    const {onSubmit, isEdit} = this.props;
+    const {onSubmit} = this.props;
     return (
       <HeaderButtons>
-        <Item title={isEdit ? '完成' : '编辑'} onPress={onSubmit} />
+        <Item title={'保存'} onPress={onSubmit} />
       </HeaderButtons>
     );
   }

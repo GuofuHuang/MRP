@@ -14,6 +14,7 @@ import Touchable from "@/components/Touchable";
 import IconFont from "@/assets/iconfont";
 import AddProductCategory from "@/pages/ProductCategory/AddProductCategory";
 import {IProductCategory} from "@/models/productCategory";
+import CategoryDetail from "@/pages/ProductCategory/CategoryDetail";
 
 const Stack = createStackNavigator();
 
@@ -98,6 +99,7 @@ class Navigator extends React.Component {
           <Stack.Screen name="Index" component={BottomTabs} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="AddProductCategory" component={AddProductCategory} />
+          <Stack.Screen name="CategoryDetail" component={CategoryDetail} />
           <Stack.Screen
             name="ProductCategory" component={ProductCategory}
             options={getOptions}

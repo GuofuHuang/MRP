@@ -87,7 +87,6 @@ const productCategoryModel: ProductCategoryModel = {
       } else if (status === 400){
         Alert.alert(msg);
       }
-
     }
   },
   reducers: {

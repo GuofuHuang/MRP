@@ -1,16 +1,13 @@
-import {StyleSheet, Text, TextInput, View} from "react-native";
 import React from "react";
-import {Formik, Field, Form} from "formik";
-import { Input } from 'react-native-elements';
-import Touchable from "@/components/Touchable";
-import IconFont from "@/assets/iconfont";
 import {connect} from "react-redux";
+import {StyleSheet, Text, View} from "react-native";
+import HeaderRightBtn from "@/pages/ProductCategory/HeaderRightBtn";
+import {Field, Formik} from "formik";
+import Touchable from "@/components/Touchable";
+import {Input} from "react-native-elements";
+import IconFont from "@/assets/iconfont";
 
 const connector = connect();
-
-const initialValues = {
-  name: ''
-};
 
 const MyInput = ({field, form, ...props }: any) => {
   return <Input
@@ -28,27 +25,34 @@ const MyInput = ({field, form, ...props }: any) => {
   />
 }
 
-class AddProductCategory extends React.Component<any, any> {
-  onSubmit = (values: any) => {
-    const {dispatch, route} = this.props;
-    dispatch({
-      type: 'productCategory/add',
-      payload: {
-        ...values,
-        ...route.params
-      },
+class CategoryDetail extends React.Component<any, any> {
+  state = {
+    name: this.props.route.params.name
+  }
+  componentDidMount() {
+    this.props.navigation.setOptions({
+      headerRight: () => <HeaderRightBtn onSubmit={this.onSubmit12} />,
     });
+  }
+
+  onSubmit12 = () => {
+    const {dispatch} = this.props;
+    const {name} = this.state;
+    console.log('dispatch', name, values);
   };
+
 
   render() {
 
-    const {navigation, route} = this.props;
-    console.log('navigation', navigation,  route);
+    const {name} = this.state;
+    const value = {
+      name: name
+    };
     return (
       <Formik
-        initialValues={initialValues}
+        initialValues={value}
         onSubmit={this.onSubmit}>
-        {({handleSubmit}) => {
+        {() => {
           return (
             <View style={{margin: 5}}>
               <Field
@@ -58,19 +62,12 @@ class AddProductCategory extends React.Component<any, any> {
                 autoCapitalize="none"
                 component={MyInput}
               />
-              <Touchable
-                onPress={handleSubmit}
-                style={styles.loginBtn}>
-                <Text style={styles.loginBtnText}>保存</Text>
-              </Touchable>
             </View>
           );
         }}
       </Formik>
     )
-  }
-}
-
+  }}
 
 const styles = StyleSheet.create({
   logo: {
@@ -96,4 +93,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-export default connector(AddProductCategory);
+export default connector(CategoryDetail);
