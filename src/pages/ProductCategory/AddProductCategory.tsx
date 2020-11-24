@@ -29,6 +29,10 @@ const MyInput = ({field, form, ...props }: any) => {
 }
 
 class AddProductCategory extends React.Component<any, any> {
+  state = {
+    level: this.props.route.params.level,
+    parentCategoryId: this.props.route.params.parentCategoryId
+  }
   onSubmit = (values: any) => {
     const {dispatch, route} = this.props;
     dispatch({
@@ -41,9 +45,6 @@ class AddProductCategory extends React.Component<any, any> {
   };
 
   render() {
-
-    const {navigation, route} = this.props;
-    console.log('navigation', navigation,  route);
     return (
       <Formik
         initialValues={initialValues}

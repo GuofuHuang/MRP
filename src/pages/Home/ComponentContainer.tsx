@@ -1,21 +1,19 @@
 import React from "react";
 import {RootState} from "@/models/index";
 import {connect, ConnectedProps} from "react-redux";
-import {RootStackNavigation} from '@/navigator/index';
 import {FlatList, SafeAreaView, StyleSheet, ScrollView, Text, View, StatusBar} from "react-native";
 import Touchable from "@/components/Touchable";
 import IconFont from "@/assets/iconfont";
-import {IconNames} from "@/assets/iconfont";
-import {IModule} from "@/pages/Home/index";
-import {navigate} from "@/utils/index";
+import {IComponent} from "@/pages/Home/index";
 
-const mapStateToProps = ({home}: RootState) => {
+const mapStateToProps = ({home, loading}: RootState) => {
   return {
-    home: home
+    home: home,
+    loading: loading.effects['productCategory/loadCategories']
   };
 };
 
-const connector = connect();
+const connector = connect(mapStateToProps);
 
 type ModelState = ConnectedProps<typeof connector>;
 // interface IProps extends ModelState {
@@ -39,19 +37,20 @@ const DATA = [
 ];
 
 interface IProps extends ModelState {
-  module: IModule;
+  component: IComponent;
 }
 
-class ModuleContainer extends React.Component<IProps, any> {
+class ComponentContainer extends React.Component<IProps, any> {
 
+  state = {
+    component: this.props.component,
+  }
   goTo = () => {
-    const {module, dispatch} = this.props;
-    console.log('goto', 'afasd', module.namespace);
-
+    const {component, dispatch} = this.props;
     dispatch({
-      type: module.namespace + '/loadCategories',
+      type: component.namespace + '/loadCategories',
       payload: {
-        component: module.component,
+        component: component.name,
         parentCategoryId: null,
         level: 0
       }
@@ -60,13 +59,13 @@ class ModuleContainer extends React.Component<IProps, any> {
   }
 
   render() {
-    const {module} = this.props;
+    const {component, loading} = this.props;
 
     return (
       <View style={styles.container}>
-        <Touchable onPress={this.goTo} style={styles.center}>
-          <IconFont name={module.icon} color={'red'} size={30} />
-          <Text>{module.name}</Text>
+        <Touchable disabled={loading} onPress={this.goTo} style={styles.center}>
+          <IconFont name={component.icon} color={'red'} size={30} />
+          <Text>{component.header}</Text>
         </Touchable>
       </View>
     )
@@ -91,4 +90,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connector(ModuleContainer);
+export default connector(ComponentContainer);

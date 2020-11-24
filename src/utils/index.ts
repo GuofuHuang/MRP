@@ -4,6 +4,7 @@ import {
   NavigationContainerRef,
 } from '@react-navigation/native';
 import React from 'react';
+import { StackActions } from '@react-navigation/routers';
 
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 
@@ -43,6 +44,10 @@ function goBack() {
   navigationRef.current?.goBack();
 }
 
+function push(name: string, params?: any) {
+  navigationRef.current && navigationRef.current.dispatch(StackActions.push(name, params));
+}
+
 export {
   viewportWidth,
   viewportHeight,
@@ -53,4 +58,5 @@ export {
   navigationRef,
   navigate,
   goBack,
+  push,
 };

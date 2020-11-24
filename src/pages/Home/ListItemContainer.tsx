@@ -4,8 +4,8 @@ import {Text} from "react-native-elements";
 import Touchable from "@/components/Touchable";
 import IconFont from "@/assets/iconfont";
 import {RootState} from "@/models/index";
-import {IListItem, IModule} from "@/pages/Home/index";
-import ModuleContainer from "@/pages/Home/ModuleContainer";
+import {IListItem, IComponent} from "@/pages/Home/index";
+import ModuleContainer from "@/pages/Home/ComponentContainer";
 
 interface IProps {
   item: IListItem
@@ -14,10 +14,10 @@ interface IProps {
 class ListItemContainer extends React.Component<IProps> {
 
   renderItem = ({item} : ListRenderItemInfo<any>) => (
-    <ModuleContainer module={item} />
+    <ModuleContainer component={item} />
   );
 
-  keyExtractor = (_: IModule, index: number) => {
+  keyExtractor = (_: IComponent, index: number) => {
     return index.toString();
   }
 

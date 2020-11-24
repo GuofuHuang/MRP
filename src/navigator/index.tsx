@@ -15,6 +15,7 @@ import IconFont from "@/assets/iconfont";
 import AddProductCategory from "@/pages/ProductCategory/AddProductCategory";
 import {IProductCategory} from "@/models/productCategory";
 import CategoryDetail from "@/pages/ProductCategory/CategoryDetail";
+import ProductCategoryList from "@/pages/ProductCategory/ProductCategoryList";
 
 const Stack = createStackNavigator();
 
@@ -25,13 +26,14 @@ export type RootStackParamList = {
   Category: undefined;
   Index: undefined;
   Login: undefined;
-  ProductCategory: any;
+  ProductCategoryList: any;
 };
 
-function getOptions({route}: { route: RouteProp<RootStackParamList, 'ProductCategory'> }) {
+function getOptions({route}: { route: RouteProp<RootStackParamList, 'ProductCategoryList'> }) {
   const {params} = route;
+  console.log('params1212', params);
   return {
-    headerTitle: "Product Category level" + params?.level,
+    headerTitle: params?.title,
     headerTitleStyle: {
       opacity: 0.5,
     },
@@ -39,7 +41,8 @@ function getOptions({route}: { route: RouteProp<RootStackParamList, 'ProductCate
       return (
         <Touchable style={{padding: 10}} onPress={(props) =>
         {
-          navigate('AddProductCategory', route.params)
+          console.log('navigate child', route);
+          navigate('AddProductCategory', route.params);
         }
         }>
           <IconFont name='plus' size={20} />
@@ -101,7 +104,7 @@ class Navigator extends React.Component {
           <Stack.Screen name="AddProductCategory" component={AddProductCategory} />
           <Stack.Screen name="CategoryDetail" component={CategoryDetail} />
           <Stack.Screen
-            name="ProductCategory" component={ProductCategory}
+            name="ProductCategoryList" component={ProductCategoryList}
             options={getOptions}
           />
         </Stack.Navigator>

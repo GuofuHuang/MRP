@@ -3,7 +3,7 @@ import {Reducer} from 'redux';
 import axios from 'axios';
 import storage, {load} from '@/config/storage';
 import {RootState} from "@/models/index";
-import {goBack, navigate} from "@/utils/index";
+import {goBack, navigate, navigationRef, push} from "@/utils/index";
 import {Alert} from "react-native";
 
 const PRODUCTCATEGORY_URL = '/product_category';
@@ -26,6 +26,7 @@ export interface ProductCategoryModel extends Model {
     getAll: Effect;
     add: Effect;
     loadCategories: Effect;
+    update: Effect;
   };
   reducers: {
     setState: Reducer<ProductCategoryModelState>;
@@ -41,19 +42,45 @@ const productCategoryModel: ProductCategoryModel = {
   namespace: 'productCategory',
   state: initalState,
   effects: {
-    *loadCategories({payload}, {call, put}) {
-      const {status, msg, data} = yield call(axios.post, PRODUCTCATEGORY_URL + '/load_categories', payload);
+    *update({payload}, {call}) {
+      console.log('console', payload);
+      const {status, msg} = yield call(axios.post, PRODUCTCATEGORY_URL + '/update', payload);
+
+      console.log('sate', status, msg);
       if (status === 200) {
-        yield put({
-          type: 'setState',
-          payload: {
-            productCategories: data,
-          },
-        });
-        navigate(payload.component, {
+        goBack();
+
+        const route: any = navigationRef.current?.getCurrentRoute();
+        let index = route.params.productCategories.findIndex(item => item._id === payload._id);
+        Object.assign(route.params.productCategories[index], payload.update);
+        navigationRef.current?.setParams({productCategories: route.params.productCategories});
+
+      } else {
+        Alert.alert('Error', msg);
+      }
+
+
+    },
+    *loadCategories({payload}, {call, put}) {
+      console.log('payload', payload);
+      const {status, msg, data} = yield call(axios.post, PRODUCTCATEGORY_URL + '/load_categories', payload);
+
+      console.log('states', status, payload.level);
+      if (status === 200) {
+        // yield put({
+        //   type: 'setState',
+        //   payload: {
+        //     productCategories: data,
+        //   },
+        // });
+        const params = {
           level: payload.level,
-          parentCategoryId: payload.parentCategoryId
-        });
+          parentCategoryId: payload.parentCategoryId,
+          productCategories: data,
+          title: payload.title
+        }
+        console.log('push', payload.component, params)
+        push(payload.component, params);
       }
     },
     *getAll(_, {call, put}) {
@@ -72,9 +99,11 @@ const productCategoryModel: ProductCategoryModel = {
     },
     *add({payload}, {call, put, select}) {
       const {data, status, msg} = yield call(axios.post, PRODUCTCATEGORY_URL + '/add', payload);
-      const {productCategories} = yield select(({productCategory}: RootState) => productCategory);
+      // const {productCategories} = yield select(({productCategory}: RootState) => productCategory);
 
-      const newResult = [...productCategories, data];
+      const newResult = [data];
+
+      console.log('payloadpayloadpayloadpayload', newResult);
 
       if (status === 200) {
         yield put({
@@ -83,7 +112,15 @@ const productCategoryModel: ProductCategoryModel = {
             productCategories: newResult,
           },
         });
+        const params = {
+          level: payload.level,
+          parentCategoryId: payload.parentCategoryId,
+          productCategories: data
+        }
+
         goBack();
+        const route: any = navigationRef.current?.getCurrentRoute();
+        navigationRef.current?.setParams({productCategories: [...route?.params?.productCategories, ...newResult]});
       } else if (status === 400){
         Alert.alert(msg);
       }

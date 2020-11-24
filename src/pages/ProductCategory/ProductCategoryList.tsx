@@ -1,59 +1,53 @@
-import React from 'react';
-import {
-  ListRenderItemInfo,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  TouchableOpacity,
-  View
-} from 'react-native';
-import {RootState} from '@/models/index';
-import {connect, ConnectedProps} from 'react-redux';
-import {RootStackNavigation} from '@/navigator/index';
-import {IProductCategory} from '@/models/productCategory';
-import Touchable from '@/components/Touchable';
-import {Avatar, ListItem} from "react-native-elements";
-import IconFont from "@/assets/iconfont";
-import {navigate} from "@/utils/index";
-import { SwipeListView } from 'react-native-swipe-list-view';
+import React from "react";
+import {connect, ConnectedProps} from "react-redux";
+import {RootStackNavigation} from "@/navigator/index";
+import {IProductCategory} from "@/models/productCategory";
+import {RootState} from "@/models/index";
+import {ListRenderItemInfo, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View} from "react-native";
 import Test from "@/pages/ProductCategory/test";
+import {SwipeListView} from "react-native-swipe-list-view";
+import Touchable from "@/components/Touchable";
+import {navigate} from "@/utils/index";
+import {ListItem} from "react-native-elements";
+import IconFont from "@/assets/iconfont";
+import {IComponent} from "@/pages/Home";
+
 
 const mapStateToProps = ({productCategory, loading}: RootState) => {
   return {
     productCategories: productCategory.productCategories,
-    loading: loading.effects['productCategory/add'],
+    loading: loading.effects['productCategory/loadCategories'],
   };
 };
+
 const connector = connect(mapStateToProps);
 
 type ModelState = ConnectedProps<typeof connector>;
 
 interface IProps extends ModelState {
   navigation: RootStackNavigation;
+  route: any;
+  component: IComponent;
 }
 
 interface IState {
   productCategories: IProductCategory[];
+  title: string;
 }
 
-class ProductCategory extends React.Component<IProps, IState> {
 
-  testRef = React.createRef<any>();
+class ProductCategoryList extends React.Component<IProps, IState> {
   state = {
-    productCategories: this.props.productCategories,
-    modalVisible: false,
-    selectedId: '',
-    selectedCategory: {
-      _id: '',
-      name: '',
-    },
+    productCategories: this.props.route.params.productCategories,
+    title: ''
   };
 
-  setModalVisible = (visible: boolean) => {
-    this.setState(Object.assign({}, this.state, {modalVisible: visible}));
-  };
+  componentDidMount() {
+    console.log('did mount');
+  }
 
   goTo = (index: number, item: IProductCategory) => {
+    console.log('goto', item);
     navigate('CategoryDetail', item);
     // this.setState(
     //   Object.assign({}, this.state, {
@@ -64,11 +58,30 @@ class ProductCategory extends React.Component<IProps, IState> {
     // );
   };
 
+  goTo1 = (index: number, item: IProductCategory) => {
+    const {dispatch} = this.props;
+
+    console.log('goto 1');
+    dispatch({
+      type: 'productCategory/loadCategories',
+      payload: {
+        component: 'ProductCategoryList',
+        parentCategoryId: item._id,
+        level: item.level + 1,
+        title: item.name
+      }
+    })
+    // navigate(module.namespace);
+  }
+
   renderItem = ({index, item}: any) => {
+    const {loading} = this.props;
+
     return (
       <TouchableHighlight
+        disabled={loading}
         key={index}
-        onPress={() => this.goTo(index, item)}
+        onPress={() => this.goTo1(index, item)}
       >
         <ListItem key={index} bottomDivider>
           <ListItem.Content>
@@ -115,26 +128,9 @@ class ProductCategory extends React.Component<IProps, IState> {
     navigate('CategoryDetail', item);
   }
 
-  render() {
-    const {productCategories} = this.props;
+  render () {
+    const {productCategories} = this.props.route.params;
     return (
-      // <SectionList
-      //   sections={this.data}
-      //   keyExtractor={(_id) => _id}
-      //   ListEmptyComponent={this.emptyComponent}
-      //   ListHeaderComponent={this.headerComponent}
-      //   ListFooterComponent={this.footerComponent}
-      //   contentContainerStyle={styles.testContainer}
-      // />
-      // <FlatList
-      //   data={productCategories}
-      //   renderItem={this.renderItem}
-      //   keyExtractor={(item) => {
-      //     return item._id;
-      //   }}
-      // />
-
-
       <View style={styles.container}>
         <SwipeListView
           useFlatList
@@ -147,12 +143,12 @@ class ProductCategory extends React.Component<IProps, IState> {
           renderHiddenItem={ (rowData, rowMap) => (
             <View style={styles.rowBack}>
               <Touchable style={[styles.backRightBtn, styles.backRightBtnLeft]}
-                onPress={() => this.editRow(rowData, rowMap)}
+                         onPress={() => this.editRow(rowData, rowMap)}
               >
                 <Text style={styles.backTextWhite}>Edit</Text>
               </Touchable>
               <Touchable style={[styles.backRightBtn, styles.backRightBtnRight]}
-                onPress={() => this.deleteRow(rowData, rowMap)}
+                         onPress={() => this.deleteRow(rowData, rowMap)}
               >
                 <Text style={styles.backTextWhite}>Delete</Text>
               </Touchable>
@@ -162,10 +158,11 @@ class ProductCategory extends React.Component<IProps, IState> {
           previewOpenValue={-1}
           previewOpenDelay={3000}
         />
-      </View>
-    );
+      </View>    )
   }
 }
+
+
 
 const borderColor = 'black';
 
@@ -273,4 +270,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connector(ProductCategory);
+export default connector(ProductCategoryList);

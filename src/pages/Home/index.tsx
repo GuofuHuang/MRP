@@ -3,15 +3,16 @@ import {RootState} from "@/models/index";
 import {connect, ConnectedProps} from "react-redux";
 import {RootStackNavigation} from '@/navigator/index';
 import {FlatList, ListRenderItemInfo, ScrollView, StyleSheet, View} from "react-native";
-import ModuleContainer from "@/pages/Home/ModuleContainer";
+import ModuleContainer from "@/pages/Home/ComponentContainer";
 import { Text } from 'react-native-elements';
 import Touchable from "@/components/Touchable";
 import IconFont, {IconNames} from "@/assets/iconfont";
 import ListItemContainer from "@/pages/Home/ListItemContainer";
 
-const mapStateToProps = ({home}: RootState) => {
+const mapStateToProps = ({home, loading}: RootState) => {
   return {
-    home: home
+    home: home,
+    loading: loading.effects['productCategory/loadCategories']
   };
 };
 
@@ -26,13 +27,13 @@ interface IProps extends ModelState {
 export interface IListItem {
   id?: string;
   title: string;
-  modules: IModule[];
+  modules: IComponent[];
 }
 
-export interface IModule {
-  name: string;
+export interface IComponent {
+  header: string;
   namespace: string;
-  component: string;
+  name: string;
   icon: IconNames;
 }
 
@@ -42,15 +43,15 @@ const DATA: IListItem[] = [
     title: '基础模块',
     modules: [
       {
-        name: "产品",
+        header: "产品",
         namespace: 'login',
-        component: 'Login',
+        name: 'Login',
         icon: 'icon_xinyong_xianxing_jijin-129',
       },
       {
-        name: "产品分类",
+        header: "产品分类",
         namespace: 'productCategory',
-        component: 'ProductCategory',
+        name: 'ProductCategoryList',
         icon: 'category',
       }
     ]
@@ -156,6 +157,7 @@ class Home extends React.Component<any, any> {
   };
 
   render() {
+    console.log('loadingloadingloadingloading', this.props.loading)
     return (
       <FlatList
         ListHeaderComponent={this.header}

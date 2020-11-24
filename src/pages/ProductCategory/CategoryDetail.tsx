@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import {StyleSheet, Text, View} from "react-native";
+import {Button, StyleSheet, Text, TextInput, View} from "react-native";
 import HeaderRightBtn from "@/pages/ProductCategory/HeaderRightBtn";
 import {Field, Formik} from "formik";
 import Touchable from "@/components/Touchable";
@@ -26,20 +26,39 @@ const MyInput = ({field, form, ...props }: any) => {
 }
 
 class CategoryDetail extends React.Component<any, any> {
+  inputElement = React.createRef<any>();
   state = {
     name: this.props.route.params.name
   }
   componentDidMount() {
     this.props.navigation.setOptions({
-      headerRight: () => <HeaderRightBtn onSubmit={this.onSubmit12} />,
+      headerRight: () => <HeaderRightBtn onSubmit={this.hook} />,
     });
   }
 
-  onSubmit12 = () => {
-    const {dispatch} = this.props;
+  hook = () => {
+    this.inputElement.current.props.onPress();
+  }
+
+  onSubmit = (values: any) => {
+    const {dispatch, route} = this.props;
     const {name} = this.state;
-    console.log('dispatch', name, values);
+    // console.log('dispatch', values, this.props.route.params);
+    dispatch({
+      type: 'productCategory/update',
+      payload: {
+        _id: route.params._id,
+        update: {
+          name: values.name
+        }
+      }
+    })
   };
+
+  onChange = (value) => {
+    console.log('onchange', value);
+  }
+
 
 
   render() {
@@ -51,17 +70,22 @@ class CategoryDetail extends React.Component<any, any> {
     return (
       <Formik
         initialValues={value}
-        onSubmit={this.onSubmit}>
-        {() => {
+        onSubmit={this.onSubmit}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values }) => {
           return (
             <View style={{margin: 5}}>
               <Field
                 name="name"
                 placeholder="请输入类别名称"
+                onChange={handleChange('name')}
                 label='名称'
                 autoCapitalize="none"
                 component={MyInput}
               />
+              <View style={{display: 'none'}}>
+                <Button ref={this.inputElement} onPress={handleSubmit} title="Submit" />
+              </View>
             </View>
           );
         }}
