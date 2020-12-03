@@ -1,13 +1,16 @@
+import {StyleSheet, Text, TextInput, View} from "react-native";
 import React from "react";
-import {connect} from "react-redux";
-import {Button, StyleSheet, Text, TextInput, View} from "react-native";
-import HeaderRightBtn from "@/pages/ProductCategory/HeaderRightBtn";
-import {Field, Formik} from "formik";
+import {Formik, Field, Form} from "formik";
+import { Input } from 'react-native-elements';
 import Touchable from "@/components/Touchable";
-import {Input} from "react-native-elements";
 import IconFont from "@/assets/iconfont";
+import {connect} from "react-redux";
 
 const connector = connect();
+
+const initialValues = {
+  name: ''
+};
 
 const MyInput = ({field, form, ...props }: any) => {
   return <Input
@@ -25,71 +28,50 @@ const MyInput = ({field, form, ...props }: any) => {
   />
 }
 
-class CategoryDetail extends React.Component<any, any> {
-  inputElement = React.createRef<any>();
+class AddProductCategory extends React.Component<any, any> {
   state = {
-    name: this.props.route.params.name
+    level: this.props.route.params.level,
+    parentCategoryId: this.props.route.params.parentCategoryId
   }
-  componentDidMount() {
-    this.props.navigation.setOptions({
-      headerRight: () => <HeaderRightBtn onSubmit={this.hook} />,
-    });
-  }
-
-  hook = () => {
-    this.inputElement.current.props.onPress();
-  }
-
   onSubmit = (values: any) => {
     const {dispatch, route} = this.props;
-    const {name} = this.state;
-    // console.log('dispatch', values, this.props.route.params);
     dispatch({
-      type: 'productCategory/update',
+      type: 'productCategory/add',
       payload: {
-        _id: route.params._id,
-        update: {
-          name: values.name
-        }
-      }
-    })
+        ...values,
+        ...route.params
+      },
+    });
   };
 
-  onChange = (value: any) => {
-    console.log('onchange', value);
-  }
-
   render() {
-
-    const {name} = this.state;
-    const value = {
-      name: name
-    };
     return (
       <Formik
-        initialValues={value}
-        onSubmit={this.onSubmit}
-      >
-        {({ handleChange, handleBlur, handleSubmit, values }) => {
+        initialValues={initialValues}
+        onSubmit={this.onSubmit}>
+        {({handleSubmit}) => {
           return (
             <View style={{margin: 5}}>
               <Field
                 name="name"
                 placeholder="请输入类别名称"
-                onChange={handleChange('name')}
                 label='名称'
                 autoCapitalize="none"
                 component={MyInput}
               />
-              <View style={{display: 'none'}}>
-                <Button ref={this.inputElement} onPress={handleSubmit} title="Submit" />
-              </View>
+              <Touchable
+                onPress={handleSubmit}
+                style={styles.loginBtn}>
+                <Text style={styles.loginBtnText}>保存</Text>
+              </Touchable>
             </View>
           );
         }}
       </Formik>
     )
-  }}
+  }
+}
+
 
 const styles = StyleSheet.create({
   logo: {
@@ -115,4 +97,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-export default connector(CategoryDetail);
+export default connector(AddProductCategory);

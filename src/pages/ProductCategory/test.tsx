@@ -28,8 +28,8 @@ export default function Test() {
   const [mode, setMode] = useState('Basic');
 
   const renderExample = () => {
-    const Component = componentMap[mode];
-    return <Component />;
+    // const Component = componentMap[mode];
+    // return <Component />;
   };
 
   return (

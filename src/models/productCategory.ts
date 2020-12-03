@@ -34,13 +34,13 @@ export interface ProductCategoryModel extends Model {
   subscriptions: SubscriptionsMapObject;
 }
 
-const initalState = {
+const initialState = {
   productCategories: [],
 };
 
 const productCategoryModel: ProductCategoryModel = {
   namespace: 'productCategory',
-  state: initalState,
+  state: initialState,
   effects: {
     *update({payload}, {call}) {
       console.log('console', payload);
@@ -51,7 +51,7 @@ const productCategoryModel: ProductCategoryModel = {
         goBack();
 
         const route: any = navigationRef.current?.getCurrentRoute();
-        let index = route.params.productCategories.findIndex(item => item._id === payload._id);
+        let index = route.params.productCategories.findIndex((item:any) => item._id === payload._id);
         Object.assign(route.params.productCategories[index], payload.update);
         navigationRef.current?.setParams({productCategories: route.params.productCategories});
 
@@ -73,6 +73,7 @@ const productCategoryModel: ProductCategoryModel = {
         //     productCategories: data,
         //   },
         // });
+
         const params = {
           level: payload.level,
           parentCategoryId: payload.parentCategoryId,

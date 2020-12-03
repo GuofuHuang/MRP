@@ -103,7 +103,7 @@ class ProductCategoryList extends React.Component<IProps, IState> {
   getKey = (_: any, index: number) => {
     return index.toString();
   }
-  renderHiddenItem = (data, rowMap) => (
+  renderHiddenItem = (data: any, rowMap: any) => (
     <View style={styles.rowBack}>
       <Text>Left</Text>
       <TouchableOpacity
@@ -140,7 +140,7 @@ class ProductCategoryList extends React.Component<IProps, IState> {
           keyExtractor={(_, index) => {
             return `${index}`;
           }}
-          renderHiddenItem={ (rowData, rowMap) => (
+          renderHiddenItem={ (rowData: any, rowMap: any) => (
             <View style={styles.rowBack}>
               <Touchable style={[styles.backRightBtn, styles.backRightBtnLeft]}
                          onPress={() => this.editRow(rowData, rowMap)}

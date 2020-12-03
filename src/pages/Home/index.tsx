@@ -35,6 +35,7 @@ export interface IComponent {
   namespace: string;
   name: string;
   icon: IconNames;
+  action: string;
 }
 
 const DATA: IListItem[] = [
@@ -44,15 +45,17 @@ const DATA: IListItem[] = [
     modules: [
       {
         header: "产品",
-        namespace: 'login',
-        name: 'Login',
+        namespace: 'product',
+        name: 'Product',
         icon: 'icon_xinyong_xianxing_jijin-129',
+        action: 'loadProducts',
       },
       {
         header: "产品分类",
         namespace: 'productCategory',
         name: 'ProductCategoryList',
         icon: 'category',
+        action: 'loadCategories'
       }
     ]
   },

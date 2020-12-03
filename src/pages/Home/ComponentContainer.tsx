@@ -5,6 +5,7 @@ import {FlatList, SafeAreaView, StyleSheet, ScrollView, Text, View, StatusBar} f
 import Touchable from "@/components/Touchable";
 import IconFont from "@/assets/iconfont";
 import {IComponent} from "@/pages/Home/index";
+import {push} from "@/utils/index";
 
 const mapStateToProps = ({home, loading}: RootState) => {
   return {
@@ -46,15 +47,25 @@ class ComponentContainer extends React.Component<IProps, any> {
     component: this.props.component,
   }
   goTo = () => {
+    console.log('goto');
     const {component, dispatch} = this.props;
     dispatch({
-      type: component.namespace + '/loadCategories',
+      type: component.namespace + '/' + component.action,
       payload: {
         component: component.name,
         parentCategoryId: null,
         level: 0
       }
     })
+
+    // const params = {
+    //   level: 0,
+    //   parentCategoryId: null,
+    //   productCategories: [],
+    //   title: 'title'
+    // }
+    // push('ProductCategoryList', params);
+
     // navigate(module.namespace);
   }
 

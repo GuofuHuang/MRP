@@ -16,6 +16,7 @@ import AddProductCategory from "@/pages/ProductCategory/AddProductCategory";
 import {IProductCategory} from "@/models/productCategory";
 import CategoryDetail from "@/pages/ProductCategory/CategoryDetail";
 import ProductCategoryList from "@/pages/ProductCategory/ProductCategoryList";
+import Product from "@/pages/Product";
 
 const Stack = createStackNavigator();
 
@@ -26,12 +27,12 @@ export type RootStackParamList = {
   Category: undefined;
   Index: undefined;
   Login: undefined;
+  Product: undefined;
   ProductCategoryList: any;
 };
 
 function getOptions({route}: { route: RouteProp<RootStackParamList, 'ProductCategoryList'> }) {
   const {params} = route;
-  console.log('params1212', params);
   return {
     headerTitle: params?.title,
     headerTitleStyle: {
@@ -102,6 +103,7 @@ class Navigator extends React.Component {
           <Stack.Screen name="Index" component={BottomTabs} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="AddProductCategory" component={AddProductCategory} />
+          <Stack.Screen name="Product" component={Product} />
           <Stack.Screen name="CategoryDetail" component={CategoryDetail} />
           <Stack.Screen
             name="ProductCategoryList" component={ProductCategoryList}
